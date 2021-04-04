@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  traefik:
+    image: traefik:v2.3
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/config/config_traefik.yml:/traefik.yml
+      - ${PWD}/config/acme.json:/acme.json
+      - ${PWD}/config/traefik.log/traefik.log
+    networks:
+      - odoo_gateway
+
+networks:
+  odoo_gateway:
+    external: true

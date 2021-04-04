@@ -6,14 +6,25 @@ services:
     build: ./
     depends_on:
       - db
-    ports:
-      - "${WEB_PORT}:8069"
+    #ports:
+    #  - "${WEB_PORT}:8069"
     volumes:
       - odoo-web-data:/var/lib/odoo
       - ./config:/etc/odoo
       - ./addons:/mnt/extra-addons
       - ./addons-customize:/mnt/extra-addons-customize
     entrypoint: "/usr/bin/odoo -c /etc/odoo/odoo.conf"
+    networks:
+      - odoo_gateway
+      - odoo_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.network=odoo_gateway"
+      - "traefik.http.routers.web.rule=Host(`odoo.ctic.pe`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls=true"
+      - "traefik.http.routers.web.tls.certresolver=odoo_resolver"
+
   db:
     container_name: ${DB_HOST}
     image: ${DB_IMAGE}:${DB_TAG}
@@ -26,6 +37,14 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - odoo-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - odoo_net
+
 volumes:
   odoo-db-data:
   odoo-web-data:
+
+
+networks:
+  odoo_gateway:
+    external: true
