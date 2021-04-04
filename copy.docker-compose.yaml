@@ -1,5 +1,6 @@
 version: '3'
 services:
+  
   web:
     container_name: ${WEB_HOST}
     image: ${WEB_IMAGE_NAME}:${WEB_IMAGE_TAG}
