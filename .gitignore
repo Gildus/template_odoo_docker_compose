@@ -2,3 +2,7 @@ config/odoo.conf
 docker-compose.yaml
 .env
 __pycache__/
+caddy/data/*
+!caddy/data/.gitkeep
+
+
