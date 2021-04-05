@@ -1,0 +1,3 @@
+domain_enterprise_example.com
+
+reverse_proxy web:8069
